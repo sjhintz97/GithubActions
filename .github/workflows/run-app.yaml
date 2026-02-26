@@ -1,17 +1,19 @@
-name: 'Run App Hintz, Samantha'
+name: 'Run App LastName, FirstName'
 
 on: [push, pull_request]
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - name: install dotnet
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
+      - name: setup msbuild
+        uses: microsoft/setup-msbuild@v1.1
+      - name: restore nuget
+        run: nuget restore GithubActions.sln
       - name: build
-        run: dotnet build
+        run: msbuild GithubActions.sln /p:Configuration=Release
       - name: run unit tests
-        run: dotnet test
+        run: |
+          $testDll = Get-ChildItem -Recurse -Filter "Tests.dll" | Select-Object -First 1
+          dotnet test $testDll.FullName
