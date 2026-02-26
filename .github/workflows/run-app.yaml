@@ -16,4 +16,4 @@ jobs:
       - name: run unit tests
         run: |
           $testDll = Get-ChildItem -Recurse -Filter "Tests.dll" | Select-Object -First 1
-          dotnet test $testDll.FullName
+          dotnet test $testDll.SamanthaHintz
